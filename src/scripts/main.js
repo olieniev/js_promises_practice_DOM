@@ -3,12 +3,17 @@
 const firstPromise = new Promise((resolve, reject) => {
   let leftClick = false;
 
-  document.addEventListener('click', () => {
-    leftClick = true;
-    resolve('First promise was resolved');
-  });
+  document.addEventListener(
+    'click',
+    () => {
+      leftClick = true;
+      resolve('First promise was resolved');
+      clearTimeout(timeout);
+    },
+    { once: true },
+  );
 
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     if (!leftClick) {
       reject(new Error('First promise was rejected'));
     }
@@ -16,36 +21,52 @@ const firstPromise = new Promise((resolve, reject) => {
 });
 
 const secondPromise = new Promise((resolve) => {
-  document.addEventListener('click', () => {
-    resolve('Second promise was resolved');
-  });
+  document.addEventListener(
+    'click',
+    () => {
+      resolve('Second promise was resolved');
+    },
+    { once: true },
+  );
 
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    resolve('Second promise was resolved');
-  });
+  document.addEventListener(
+    'contextmenu',
+    (e) => {
+      e.preventDefault();
+      resolve('Second promise was resolved');
+    },
+    { once: true },
+  );
 });
 
 const thirdPromise = new Promise((resolve, reject) => {
   let leftClick = false;
   let rightClick = false;
 
-  document.addEventListener('click', () => {
-    leftClick = true;
+  document.addEventListener(
+    'click',
+    () => {
+      leftClick = true;
 
-    if (leftClick && rightClick) {
-      resolve('Third promise was resolved');
-    }
-  });
+      if (leftClick && rightClick) {
+        resolve('Third promise was resolved');
+      }
+    },
+    { once: true },
+  );
 
-  document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    rightClick = true;
+  document.addEventListener(
+    'contextmenu',
+    (e) => {
+      e.preventDefault();
+      rightClick = true;
 
-    if (leftClick && rightClick) {
-      resolve('Third promise was resolved');
-    }
-  });
+      if (leftClick && rightClick) {
+        resolve('Third promise was resolved');
+      }
+    },
+    { once: true },
+  );
 });
 
 function showNotification(message, isSuccess) {
